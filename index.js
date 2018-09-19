@@ -1,7 +1,23 @@
 var canvas;
 var canvasContext;
 var ballX = 50;
-var ballSpeedX = 5;
+var ballY = 50;
+var ballSpeedX = 10;
+var ballSpeedY = 4;
+
+var paddle1Y = 250;
+const PADDLE_HEIGHT = 100;
+
+function calculateMousePos(evt){
+    var rect = canvas.getBoundingClientREct();
+    var root = document.documentElement;
+    var mouseX = evt.clientX - rect.left - root.scrollLeft;
+    var mouseY = evt.clientY - rect.top - root.scrollTop;
+    return {
+        x: mouseX,
+        y:mouseY
+    };
+}
 
 window.onload = function() {
     canvas = document.getElementById('gameCanvas');
@@ -17,19 +33,43 @@ window.onload = function() {
 
 function moveEverything() {
     ballX = ballX + ballSpeedX;
+    ballY = ballY + ballSpeedY;
+    
+    if (ballX < 0) {
+        ballSpeedX = - ballSpeedX
+    }
     if (ballX > canvas.width) {
         ballSpeedX = - ballSpeedX
     }
-    if (ballX < 0) {
-        ballSpeedX = -ballSpeedX
+
+    if (ballY < 0) {
+        ballSpeedY = -ballSpeedY;
     }
+    if (ballY > canvas.height) {
+        ballSpeedY = -ballSpeedY;
+    }
+    
 }
 
 function drawEverything() {
-    canvasContext.fillStyle = 'black';
-    canvasContext.fillRect(0,0, canvas.width, canvas.height);
+    // next line blanks out the screen with black
+    colorRect(0,0, canvas.width, canvas.height, 'black');
+    // this is left player paddle
+    colorRect(0, 210, 10, 100, 'white');
+    // next line draws the ball
     canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(0, 210, 10, 100);
-    canvasContext.fillStyle = 'red';
-    canvasContext.fillRect(ballX, 100, 10, 10);
+    canvasContext.beginPath();
+    canvasContext.arc(ballX, ballY, 10, 0, Math.PI*2, true);
+    canvasContext.fill();
+}
+
+function colorCircle(centerX, centerY, radius, drawColor) {
+    canvasContext.fillStyle = drawColor;
+    canvasContext.beginPath();
+    canvasContext.arc(centerX, )
+}
+
+function colorRect(leftX, topY, width, height, drawColor) {
+    canvasContext.fillStyle = drawColor;
+    canvasContext.fillRect(leftX, topY, width, height);
 }
