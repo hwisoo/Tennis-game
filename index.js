@@ -17,7 +17,7 @@ const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
 
 function calculateMousePos(evt){
-    var rect = canvas.getBoundingClientREct();
+    var rect = canvas.getBoundingClientRect();
     var root = document.documentElement;
     var mouseX = evt.clientX - rect.left - root.scrollLeft;
     var mouseY = evt.clientY - rect.top - root.scrollTop;
@@ -44,6 +44,8 @@ window.onload = function() {
         moveEverything();
         drawEverything();
     }, 1000/framesPerSecond);
+
+    canvas.addEventListener('mousedown', handleMouseClick);
 
     canvas.addEventListener('mousemove',
             function(evt) {
@@ -77,7 +79,7 @@ function moveEverything() {
     if(showingWinScreen) {
         return;
     }
-    
+
     computerMovement();
 
     ballX += ballSpeedX;
@@ -118,10 +120,30 @@ function moveEverything() {
     }    
 }
 
+function drawNet() {
+    for(var i=0; i<canvas.height; i+=40){
+        colorRect(canvas.width/2-1,i,2,20,'white');
+    }
+}
+
 function drawEverything() {
     // next line blanks out the screen with black
     colorRect(0,0, canvas.width, canvas.height, 'black');
     
+    if(showingWinScreen) {
+        canvasContext.fillStyle = 'white';
+
+        if(player1Score >= WINNING_SCORE) {
+            canvasContext.fillText("Left Player Won", 350, 200);
+        } else if(player2Score >= WINNING_SCORE) {
+            canvasContext.fillText("Right Player Won", 350, 200);
+        }
+
+        canvasContext.fillText("click to continue", 350, 500);
+        return;
+    }
+
+    drawNet();
     // this is left player paddle
     colorRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
 
