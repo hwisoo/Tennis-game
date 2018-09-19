@@ -9,6 +9,8 @@ var player1Score = 0;
 var player2Score = 0;
 const WINNING_SCORE = 3;
 
+var showingWinScreen = false;
+
 var paddle1Y = 250;
 var paddle2Y = 250;
 const PADDLE_THICKNESS = 10;
@@ -23,6 +25,14 @@ function calculateMousePos(evt){
         x: mouseX,
         y: mouseY
     };
+}
+
+function handleMouseClick(evt){
+    if(showingWinScreen) {
+        player1Score = 0;
+        player2Score = 0;
+        showingWinScreen = false;
+    }
 }
 
 window.onload = function() {
@@ -45,8 +55,8 @@ window.onload = function() {
 function ballReset() {
     if(player1Score >= WINNING_SCORE ||
         player2Score >= WINNING_SCORE){
-            player1Score = 0;
-            player2Score = 0;
+            
+            showingWinScreen = true;
         }
 
     ballSpeedX = -ballSpeedX;
@@ -64,6 +74,10 @@ function computerMovement(){
 }
 
 function moveEverything() {
+    if(showingWinScreen) {
+        return;
+    }
+    
     computerMovement();
 
     ballX += ballSpeedX;
